@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const port = 3000;
@@ -8,7 +9,14 @@ app.use(express.json());
 // Функция для добавления флоу
 const addFlow = (path, json) => {
   app.post(path, (req, res) => {
-    res.json(json);
+    // Подстановка ключей из переменных окружения
+    const modifiedJson = JSON.parse(JSON.stringify(json), (key, value) => {
+      if (typeof value === 'string' && value.startsWith('env:')) {
+        return process.env[value.substring(4)];
+      }
+      return value;
+    });
+    res.json(modifiedJson);
   });
 };
 
@@ -36,4 +44,6 @@ flows.forEach(flow => {
 
 app.listen(port, () => {
   console.log(`App running on http://localhost:${port}`);
+});
+
 });
