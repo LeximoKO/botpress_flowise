@@ -12,4 +12,5 @@ COPY . .
 EXPOSE 3000
 
 # Запустите приложение
-CMD ["npm", "start"]
+CMD ["node", "index.js"]
+
